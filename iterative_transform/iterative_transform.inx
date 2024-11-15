@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <name> Iterative Transformation</name>
+    <id>duplicate_and_transform</id>
+    <param name="transformation_center" type="optiongroup" appearance="combo" _gui-text="Transformation Center" default="center">
+        <option value="c">Center</option>
+        <option value="nw">Top Left</option>
+        <option value="ne">Top Right</option>
+        <option value="sw">Bottom Left</option>
+        <option value="se">Bottom Right</option>
+        <option value="n">Top</option>
+        <option value="s">Bottom</option>
+        <option value="e">Right</option>
+        <option value="w">Left</option>
+    </param>
+    <param name="rotate_around" type="optiongroup" appearance="combo" _gui-text="Rotate Around" default="updated">
+        <option value="duplicate">duplicated object center</option>
+        <option value="original">original object center</option>
+    </param>
+    <param name="scale_stroke" type="boolean" _gui-text="Scale Stroke Width with Object">false</param>
+    <param name="scale" type="float" precision="3" _gui-text="Scaling Factor" max="100">1</param>
+    <param name="rotate" type="float" precision="3" _gui-text="Rotation Angle (degrees)" min="-360" max="360">0</param>
+    <param name="translate_x" type="float" precision="3" _gui-text="Translation X"  min="-1000" max="1000">0</param>
+    <param name="translate_y" type="float" precision="3" _gui-text="Translation Y" min="-1000" max="1000">0</param>
+    <param name="skew_x" type="float" precision="3" _gui-text="Skew X (degrees)" min="-360" max="360">0</param>
+    <param name="skew_y" type="float" precision="3" _gui-text="Skew Y (degrees)" min="-360" max="360">0</param>
+    <param name="iterations" type="int" _gui-text="Number of Iterations" min="1" max="9999">1</param>
+    <effect>
+        <!--object-type>path</object-type-->
+        <effects-menu>
+            <submenu name="Generate from Path"/>
+        </effects-menu>
+    </effect>
+    
+  <script>
+    <command location="inx" interpreter="python">iterative_transform.py</command>
+  </script>
+</inkscape-extension>
