@@ -18,7 +18,8 @@
         <option value="original">original object center</option>
     </param>
     <param name="scale_stroke" type="boolean" _gui-text="Scale Stroke Width with Object">false</param>
-    <param name="scale" type="float" precision="3" _gui-text="Scaling Factor" max="100">1</param>
+    <param name="scale_x" type="float" precision="3" _gui-text="Scaling Factor x" max="100">1</param>
+    <param name="scale_y" type="float" precision="3" _gui-text="Scaling Factor y" max="100">1</param>
     <param name="rotate" type="float" precision="3" _gui-text="Rotation Angle (degrees)" min="-360" max="360">0</param>
     <param name="translate_x" type="float" precision="3" _gui-text="Translation X"  min="-1000" max="1000">0</param>
     <param name="translate_y" type="float" precision="3" _gui-text="Translation Y" min="-1000" max="1000">0</param>

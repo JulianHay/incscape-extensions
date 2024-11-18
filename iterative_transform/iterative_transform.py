@@ -5,7 +5,8 @@ class DuplicateAndTransform(inkex.EffectExtension):
     def add_arguments(self, pars):
         pars.add_argument("--transformation_center", type=str, default="c", help="Transformation center")
         pars.add_argument("--rotate_around", type=str, default="duplicate", help="Rotation center")
-        pars.add_argument("--scale", type=float, default=1.0, help="Scaling factor")
+        pars.add_argument("--scale_x", type=float, default=1.0, help="Scaling factor x")
+        pars.add_argument("--scale_y", type=float, default=1.0, help="Scaling factor y")
         pars.add_argument("--rotate", type=float, default=0, help="Rotation angle (degrees)")
         pars.add_argument("--translate_x", type=float, default=0, help="Translation X")
         pars.add_argument("--translate_y", type=float, default=0, help="Translation Y")
@@ -56,11 +57,13 @@ class DuplicateAndTransform(inkex.EffectExtension):
                 composite_transform = inkex.Transform()
 
                 # Apply scale transformation without compounding
-                if self.options.scale != 1:
+                if self.options.scale_x != 1 or self.options.scale_y != 1:
                     scale_transform = inkex.Transform()
-                    scale_factor = self.options.scale ** (i + 1)
+                    scale_x = self.options.scale_x ** (i + 1)
+                    scale_y = self.options.scale_y ** (i + 1)
+                    scale_factor = scale_x * scale_y
                     scale_transform.add_translate(transformation_center)
-                    scale_transform.add_scale(scale_factor, scale_factor)
+                    scale_transform.add_scale(scale_x, scale_y)
                     scale_transform.add_translate(-transformation_center)
                     composite_transform = composite_transform @ scale_transform
 
