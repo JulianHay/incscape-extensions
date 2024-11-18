@@ -14,6 +14,7 @@ class DuplicateAndTransform(inkex.EffectExtension):
         pars.add_argument("--skew_y", type=float, default=0, help="Skew Y angle (degrees)")
         pars.add_argument("--iterations", type=int, default=10, help="Number of iterations")
         pars.add_argument("--scale_stroke", type=inkex.Boolean, default=False, help="Scale Stroke Width with Object")
+        pars.add_argument("--opacity", type=float, default=1.0, help="Opacity")
 
     def get_transform_center(self, obj, transformation_center):
         bbox = obj.bounding_box()
@@ -99,6 +100,10 @@ class DuplicateAndTransform(inkex.EffectExtension):
                     translate_transform.add_translate(self.options.translate_x * (i + 1),
                                                       self.options.translate_y * (i + 1))
                     composite_transform = composite_transform @ translate_transform
+
+                if self.options.opacity != 1:
+                    duplicate.style['stroke-opacity'] = str(self.options.opacity**(i + 1))
+                    duplicate.style['fill-opacity'] = str(self.options.opacity**(i + 1))
 
                 # Apply the composite transformation to the duplicate
                 duplicate.transform = composite_transform
