@@ -1,4 +1,6 @@
 import inkex
+from copy import deepcopy
+import numpy as np
 
 class DuplicateAndTransform(inkex.EffectExtension):
 
@@ -17,7 +19,8 @@ class DuplicateAndTransform(inkex.EffectExtension):
         pars.add_argument("--opacity", type=float, default=1.0, help="Opacity")
 
     def get_transform_center(self, obj, transformation_center):
-        bbox = obj.bounding_box()
+        inverse_transformation = self.inverse_transform(obj)
+        bbox = obj.bounding_box(inverse_transformation)
         if bbox is None:
             return inkex.Vector2d(0, 0)
 
@@ -36,10 +39,20 @@ class DuplicateAndTransform(inkex.EffectExtension):
 
         return center_points.get(transformation_center, bbox.center)
 
+    def inverse_transform(self, obj):
+        transform_matrix = np.array(list(obj.transform.matrix) + [[0, 0, 1]])
+        m_inv = np.linalg.inv(transform_matrix)
+        inverse_transform = inkex.Transform()
+        inverse_transform.add_matrix(
+            m_inv[0, 0], m_inv[1, 0],
+            m_inv[0, 1], m_inv[1, 1],
+            m_inv[0, 2], m_inv[1, 2]
+        )
+        return inverse_transform
+
     def effect(self):
         for elem in self.svg.selected.values():
             document = elem.getparent()
-            original_transform = elem.transform
 
             # Define the center point for rotation and scaling
             transformation_center = self.get_transform_center(elem, self.options.transformation_center)
@@ -49,10 +62,9 @@ class DuplicateAndTransform(inkex.EffectExtension):
 
             for i in range(self.options.iterations):
                 # Create a fresh duplicate from the original element
-                duplicate = elem.duplicate()
+                duplicate = deepcopy(elem)
 
-                # Reset to original transform for each new duplicate
-                duplicate.transform = original_transform
+                # duplicate.transform = original_transform
 
                 # Initialize a composite transformation for this iteration
                 composite_transform = inkex.Transform()
@@ -106,7 +118,7 @@ class DuplicateAndTransform(inkex.EffectExtension):
                     duplicate.style['fill-opacity'] = str(self.options.opacity**(i + 1))
 
                 # Apply the composite transformation to the duplicate
-                duplicate.transform = composite_transform
+                duplicate.transform = duplicate.transform @ composite_transform
 
                 # Append the duplicate to the SVG document
                 document.append(duplicate)
